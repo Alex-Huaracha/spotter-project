@@ -16,15 +16,26 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "soynuevo",
-  "password": "123"
+  "username": "kyra_grady81",
+  "password": "gymrat123"
 }
 
 ### Login
-POST http://localhost:3000/api/auth/login
+# POST http://localhost:3000/api/auth/login
+# Content-Type: application/json
+
+# {
+#   "username": "nuevo@gym.com",
+#   "password": "123"
+# }
+
+### Create Post
+POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "username": "nuevo@gym.com",
-  "password": "123"
+  "content": "Este es mi primer post desde la API!"
 }
+
+### Get Posts Feed
+GET http://localhost:3000/api/posts

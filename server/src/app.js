@@ -2,13 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { prisma } from '../prisma/client.js';
-
 import session from 'express-session';
 import passport from 'passport';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import './config/passport.js';
-import { globalErrorHandler } from './middleware/errorHandler.js';
+
 import authRoutes from './routes/auth.js';
+import postRoutes from './routes/posts.js';
+import { globalErrorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// AUTHENTICATION MIDDLEWARES
+// Authentication Middlewares
 app.use(
   session({
     cookie: {
@@ -39,29 +40,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session()); // Enables persistent sessions
 
-// --- ROUTES ---
+// Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 app.get('/', (req, res) => {
   res.send('Spotter API v1');
 });
 
-app.get('/api/feed', async (req, res) => {
-  try {
-    const posts = await prisma.post.findMany({
-      take: 20,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        author: { select: { username: true, avatarUrl: true, gymGoals: true } },
-        _count: { select: { likes: true, children: true } },
-      },
-    });
-    res.json(posts);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error fetching the feed' });
-  }
-});
-
+// Global Error Handler
 app.use(globalErrorHandler);
 
 export default app;
