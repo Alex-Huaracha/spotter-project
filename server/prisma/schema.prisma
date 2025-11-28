@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
+  password String
+
+  bio        String?
+  gymGoals   String?
+  experience String?
+  avatarUrl  String? @default("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
+
+  createdAt DateTime @default(now())
+
+  posts Post[]
+  likes Like[]
+
+  followedBy Follows[] @relation("following")
+  following  Follows[] @relation("follower")
+}
+
+model Follows {
+  followerId  String
+  followingId String
+
+  follower  User @relation("follower", fields: [followerId], references: [id])
+  following User @relation("following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String   @db.VarChar(280)
+  createdAt DateTime @default(now())
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  parentId String?
+  parent   Post?   @relation("PostHistory", fields: [parentId], references: [id])
+  children Post[]  @relation("PostHistory")
+
+  likes Like[]
+}
+
+model Like {
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+}
