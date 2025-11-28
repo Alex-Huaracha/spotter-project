@@ -7,6 +7,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import './config/passport.js';
+import { globalErrorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.js';
 
 const app = express();
@@ -61,16 +62,6 @@ app.get('/api/feed', async (req, res) => {
   }
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack); // Muestra el error en tu terminal para que tú lo veas
-
-  // Devuelve JSON al cliente
-  res.status(err.status || 500).json({
-    status: 'error',
-    message: err.message || 'Error Interno del Servidor',
-    // Solo mostramos el stack trace si no estamos en producción (seguridad)
-    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
-  });
-});
+app.use(globalErrorHandler);
 
 export default app;
