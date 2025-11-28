@@ -1,0 +1,30 @@
+### Register
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "soynuevo",
+  "email": "nuevo@gym.com",
+  "password": "123"
+}
+
+### Logout
+POST http://localhost:3000/api/auth/logout
+
+### Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "soynuevo",
+  "password": "123"
+}
+
+### Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nuevo@gym.com",
+  "password": "123"
+}
