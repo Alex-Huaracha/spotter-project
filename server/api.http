@@ -50,3 +50,12 @@ Content-Type: application/json
 
 ### Delete Post
 DELETE http://localhost:3000/api/posts/5f8fdbc3-6a0f-44c7-8199-a9c2b1888a9c
+
+### Get User Profile
+GET http://localhost:3000/api/users/lemuel.bergstrom81
+
+### Follow User
+POST http://localhost:3000/api/users/b22b451f-235b-447a-9550-89a1f216dc85/follow
+
+### Unfollow User
+DELETE http://localhost:3000/api/users/b22b451f-235b-447a-9550-89a1f216dc85/follow

@@ -9,6 +9,7 @@ import './config/passport.js';
 
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/posts.js';
+import userRoutes from './routes/users.js';
 import { globalErrorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -43,6 +44,8 @@ app.use(passport.session()); // Enables persistent sessions
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/users', userRoutes);
+
 app.get('/', (req, res) => {
   res.send('Spotter API v1');
 });
