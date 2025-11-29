@@ -1,19 +1,12 @@
 import { prisma } from '../../prisma/client.js';
+import { createPostSchema } from '../schemas/postSchema.js';
 
 export const createPost = async (req, res, next) => {
   try {
-    const { content, parentId } = req.body;
+    const validatedData = createPostSchema.parse(req.body);
+
+    const { content, parentId } = validatedData;
     const authorId = req.user.id;
-
-    if (!content) {
-      return res.status(400).json({ message: 'Content cannot be empty' });
-    }
-
-    if (content.length > 280) {
-      return res
-        .status(400)
-        .json({ message: 'You exceeded 280 characters, gymbro.' });
-    }
 
     const newPost = await prisma.post.create({
       data: {
@@ -138,6 +131,7 @@ export const updatePost = async (req, res, next) => {
     next(error);
   }
 };
+
 export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;

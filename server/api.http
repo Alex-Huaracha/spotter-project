@@ -69,7 +69,7 @@ POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "content": "[ANSWER 2]: I would love to join you for workouts!",
+  "content": "[ANSWER 6]: I would love to join you for workouts!",
   "parentId": "cdf29532-d98b-4ea9-afc7-570572e81843"
 }
 
