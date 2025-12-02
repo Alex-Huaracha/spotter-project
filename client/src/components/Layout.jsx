@@ -1,4 +1,5 @@
 import { Navbar } from './Navbar';
+import { WhoToFollow } from './WhoToFollow';
 
 export const Layout = ({ children }) => {
   return (
@@ -15,12 +16,12 @@ export const Layout = ({ children }) => {
         {/* Widgets */}
         {/* Visible only on large screens (lg) */}
         <aside className="hidden lg:block w-[350px] pl-8 py-4 h-screen sticky top-0">
-          <div className="bg-spotter-dark rounded-xl p-4 sticky top-4">
-            <h2 className="font-bold text-xl mb-4">Who to follow</h2>
-            {/* Suggestions will be fetched from the backend later */}
-            <div className="text-spotter-textGray text-sm">
-              Loading suggestions...
-            </div>
+          <WhoToFollow />
+
+          {/* Small Footer */}
+          <div className="mt-6 text-xs text-spotter-textGray px-4">
+            <p>© 2025 Spotter Project</p>
+            <p>Developed by Alex Huarcha</p>
           </div>
         </aside>
       </div>
