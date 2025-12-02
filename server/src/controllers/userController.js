@@ -107,3 +107,46 @@ export const getProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserPosts = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const currentUserId = req.user?.id; // The user viewing the profile
+
+    // Find the ID of the user who owns the profile
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const posts = await prisma.post.findMany({
+      where: {
+        authorId: user.id,
+        parentId: null, // Only main posts, not replies
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: { username: true, avatarUrl: true, gymGoals: true },
+        },
+        _count: {
+          select: { likes: true, children: true },
+        },
+        likes: {
+          where: { userId: currentUserId },
+          select: { userId: true },
+        },
+      },
+    });
+
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      likedByMe: post.likes.length > 0,
+    }));
+
+    res.json(formattedPosts);
+  } catch (error) {
+    next(error);
+  }
+};
