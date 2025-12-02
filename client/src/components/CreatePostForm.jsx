@@ -3,7 +3,11 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
-export const CreatePostForm = ({ onPostCreated }) => {
+export const CreatePostForm = ({
+  onPostCreated,
+  parentId = null,
+  placeholder,
+}) => {
   const { user } = useAuth();
   const { register, handleSubmit, reset, watch } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +20,7 @@ export const CreatePostForm = ({ onPostCreated }) => {
     if (isOverLimit) return;
     setIsSubmitting(true);
     try {
-      await axios.post('/api/posts', data);
+      await axios.post('/api/posts', { ...data, parentId });
       reset();
       if (onPostCreated) onPostCreated(); // Notify parent to reload the feed
     } catch (error) {
@@ -38,7 +42,7 @@ export const CreatePostForm = ({ onPostCreated }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
         <textarea
           {...register('content', { required: true })}
-          placeholder="What's happening at the gym?"
+          placeholder={placeholder || "What's happening at the gym?"}
           rows="2"
           className="w-full bg-transparent text-xl text-spotter-text placeholder-spotter-textGray border-none focus:ring-0 resize-none outline-none"
         ></textarea>
@@ -58,7 +62,7 @@ export const CreatePostForm = ({ onPostCreated }) => {
             disabled={!content.trim() || isSubmitting || isOverLimit}
             className="bg-spotter-blue hover:bg-spotter-blueHover disabled:opacity-50 text-white font-bold py-1.5 px-4 rounded-full transition-colors"
           >
-            {isSubmitting ? 'Posting...' : 'Post'}
+            {isSubmitting ? 'Sending...' : parentId ? 'Reply' : 'Post'}
           </button>
         </div>
       </form>
