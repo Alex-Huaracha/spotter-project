@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -18,31 +19,37 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Private Routes (With Layout) */}
+          {/* Private Routes (Only Login) */}
           <Route
             path="/"
             element={
-              <Layout>
-                <HomePage />
-              </Layout>
+              <ProtectedRoute>
+                <Layout>
+                  <HomePage />
+                </Layout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/u/:username"
             element={
-              <Layout>
-                <ProfilePage />
-              </Layout>
+              <ProtectedRoute>
+                <Layout>
+                  <ProfilePage />
+                </Layout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/post/:id"
             element={
-              <Layout>
-                <PostPage />
-              </Layout>
+              <ProtectedRoute>
+                <Layout>
+                  <PostPage />
+                </Layout>
+              </ProtectedRoute>
             }
           />
         </Routes>
